@@ -1,0 +1,59 @@
+package com.hcmus.api.service.impl;
+
+import com.hcmus.api.model.dto.UserTypeDTO;
+import com.hcmus.api.model.entity.UserType;
+import com.hcmus.api.model.mapper.impl.UserTypeMapper;
+import com.hcmus.api.repository.UserTypeRepository;
+import com.hcmus.api.service.GenericService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service(value = "userTypeService")
+public class UserTypeService implements GenericService<UserTypeDTO, Long> {
+    @Autowired
+    private UserTypeRepository userTypeRepository;
+
+    @Autowired
+    @Qualifier(value = "userTypeMapper")
+    private UserTypeMapper userTypeMapper;
+
+    @Override
+    public List<UserTypeDTO> getAll() {
+        return null;
+    }
+
+    @Override
+    public UserTypeDTO getById(Long userTypeId) {
+        Optional<UserType> userType = userTypeRepository.findById(userTypeId);
+
+        if (userType.isEmpty()) {
+            return null;
+        }
+
+        return userTypeMapper.convertToDTO(userType.get());
+    }
+
+    @Override
+    public void create(UserTypeDTO object) {
+
+    }
+
+    @Override
+    public void update(Long id, UserTypeDTO object) {
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
+
+    @Override
+    public void deleteAll() {
+
+    }
+}
