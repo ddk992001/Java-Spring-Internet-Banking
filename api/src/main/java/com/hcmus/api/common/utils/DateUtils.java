@@ -1,6 +1,7 @@
-package com.hcmus.api.common;
+package com.hcmus.api.common.utils;
 
-import java.sql.Timestamp;
+import com.hcmus.api.common.variables.Time;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -8,10 +9,9 @@ import java.util.TimeZone;
 
 public class DateUtils {
     private static final String TIME_ZONE = "Asia/Ho_Chi_Minh";
-    private static final int VN_UTC = 7 * 3600; // +7GMT
 
     public static long convertLocalDateTimeToTimeStamp(LocalDateTime localDateTime) {
-        return localDateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(VN_UTC));
+        return localDateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(Time.VN_UTC));
     }
 
     public static LocalDateTime convertTimeStampToLocalDateTime(long timeStamp) {

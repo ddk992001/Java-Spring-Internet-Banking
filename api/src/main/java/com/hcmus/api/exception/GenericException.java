@@ -1,6 +1,6 @@
 package com.hcmus.api.exception;
 
-import com.hcmus.api.common.FailedOperation;
+import com.hcmus.api.common.variables.FailedOperation;
 
 public class GenericException extends Exception {
     private final FailedOperation error;

@@ -1,7 +1,7 @@
 package com.hcmus.api.exception;
 
-import com.hcmus.api.common.FailedOperation;
-import com.hcmus.api.common.Response;
+import com.hcmus.api.common.variables.FailedOperation;
+import com.hcmus.api.common.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

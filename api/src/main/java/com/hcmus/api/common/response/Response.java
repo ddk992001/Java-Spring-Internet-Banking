@@ -1,4 +1,4 @@
-package com.hcmus.api.common;
+package com.hcmus.api.common.response;
 
 public class Response {
     private final String message;
@@ -12,14 +12,14 @@ public class Response {
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public int getCode() {
-        return code;
+        return this.code;
     }
 
     public boolean isStatus() {
-        return status;
+        return this.status;
     }
 }

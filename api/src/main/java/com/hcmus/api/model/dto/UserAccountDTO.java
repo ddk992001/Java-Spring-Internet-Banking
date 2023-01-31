@@ -1,6 +1,6 @@
 package com.hcmus.api.model.dto;
 
-import com.hcmus.api.common.Response;
+import com.hcmus.api.common.response.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

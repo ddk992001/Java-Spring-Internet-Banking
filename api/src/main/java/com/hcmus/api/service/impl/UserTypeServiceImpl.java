@@ -1,5 +1,7 @@
 package com.hcmus.api.service.impl;
 
+import com.hcmus.api.common.variables.FailedOperation;
+import com.hcmus.api.exception.GenericException;
 import com.hcmus.api.model.dto.UserTypeDTO;
 import com.hcmus.api.model.entity.UserType;
 import com.hcmus.api.model.mapper.impl.UserTypeMapper;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service(value = "userTypeService")
-public class UserTypeService implements GenericService<UserTypeDTO, Long> {
+public class UserTypeServiceImpl implements GenericService<UserTypeDTO, Long> {
     @Autowired
     private UserTypeRepository userTypeRepository;
 
@@ -27,12 +29,11 @@ public class UserTypeService implements GenericService<UserTypeDTO, Long> {
     }
 
     @Override
-    public UserTypeDTO getById(Long userTypeId) {
+    public UserTypeDTO getById(Long userTypeId) throws GenericException {
         Optional<UserType> userType = userTypeRepository.findById(userTypeId);
 
-        if (userType.isEmpty()) {
-            return null;
-        }
+        if (userType.isEmpty())
+            throw new GenericException(FailedOperation.NOT_EXISTED_USER_TYPE);
 
         return userTypeMapper.convertToDTO(userType.get());
     }
