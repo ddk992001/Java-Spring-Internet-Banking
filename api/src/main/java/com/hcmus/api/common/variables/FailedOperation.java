@@ -7,7 +7,9 @@ public enum FailedOperation {
     NOT_EXISTED_FORGOT_PASSWORD_HISTORY_RECORD("Validation failed. Do not have any otp records for this user!", 7003),
     FORGOT_PASSWORD_OTP_VALIDATION_FAILED("Validation failed. OTP code may be incorrect or the session was expired!", 7004),
     FORGOT_PASSWORD_INVALID_RESET_TOKEN("Reset failed. This user do not have permission to reset password!", 7005),
-    NOT_EXISTED_ACCOUNT("The user account does not exist in the system!", 7006);
+    NOT_EXISTED_ACCOUNT("The user account does not exist in the system!", 7006),
+    UNAUTHENTICATED_USER("Unauthenticated user!", 7007),
+    CHANGE_PASSWORD_FAILED("Old password is incorrect!", 7008);
 
     private final String message;
     private final int code;

@@ -1,5 +1,6 @@
 package com.hcmus.api.service.impl;
 
+import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 import com.hcmus.api.exception.GenericException;
 import com.hcmus.api.model.dto.ForgotPasswordHistoryDTO;
@@ -37,7 +38,7 @@ public class ForgotPasswordHistoryServiceImpl implements GenericService<ForgotPa
 
     @Override
     public void create(ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) {
-        forgotPasswordHistoryRepository.saveAndFlush(forgotPasswordHistoryMapper.convertToEntity(forgotPasswordHistoryDTO));
+        forgotPasswordHistoryRepository.save(forgotPasswordHistoryMapper.convertToEntity(forgotPasswordHistoryDTO));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ForgotPasswordHistoryServiceImpl implements GenericService<ForgotPa
         Optional<ForgotPasswordHistory> forgotPasswordHistory = forgotPasswordHistoryRepository.findById(id);
 
         if (forgotPasswordHistory.isEmpty())
-            throw new GenericException(FailedOperation.NOT_EXISTED_FORGOT_PASSWORD_HISTORY_RECORD);
+            throw new GenericException(FailedOperation.NOT_EXISTED_FORGOT_PASSWORD_HISTORY_RECORD, ExceptionType.COMMON_EXCEPTION);
 
         ForgotPasswordHistoryDTO oldForgotPasswordRecord = forgotPasswordHistoryMapper.convertToDTO(forgotPasswordHistory.get());
 
@@ -73,7 +74,7 @@ public class ForgotPasswordHistoryServiceImpl implements GenericService<ForgotPa
         List<ForgotPasswordHistory> forgotPasswordHistory = forgotPasswordHistoryRepository.findByForgotPasswordIdUserId(userId);
 
         if (forgotPasswordHistory.size() == 0)
-            throw new GenericException(FailedOperation.NOT_EXISTED_FORGOT_PASSWORD_HISTORY_RECORD);
+            throw new GenericException(FailedOperation.NOT_EXISTED_FORGOT_PASSWORD_HISTORY_RECORD, ExceptionType.COMMON_EXCEPTION);
 
         return forgotPasswordHistoryMapper.convertToDTO(forgotPasswordHistory.get(forgotPasswordHistory.size()-1));
     }

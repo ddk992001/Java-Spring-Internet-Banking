@@ -1,5 +1,6 @@
 package com.hcmus.api.service.impl;
 
+import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 import com.hcmus.api.exception.GenericException;
 import com.hcmus.api.model.dto.UserTypeDTO;
@@ -33,7 +34,7 @@ public class UserTypeServiceImpl implements GenericService<UserTypeDTO, Long> {
         Optional<UserType> userType = userTypeRepository.findById(userTypeId);
 
         if (userType.isEmpty())
-            throw new GenericException(FailedOperation.NOT_EXISTED_USER_TYPE);
+            throw new GenericException(FailedOperation.NOT_EXISTED_USER_TYPE, ExceptionType.COMMON_EXCEPTION);
 
         return userTypeMapper.convertToDTO(userType.get());
     }

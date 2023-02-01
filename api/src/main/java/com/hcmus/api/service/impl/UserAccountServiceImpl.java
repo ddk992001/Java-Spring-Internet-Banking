@@ -4,6 +4,7 @@ import com.hcmus.api.common.response.ForgotPasswordOtpValidationResponse;
 import com.hcmus.api.common.utils.DateUtils;
 import com.hcmus.api.common.utils.MailUtils;
 import com.hcmus.api.common.utils.OtpUtils;
+import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 import com.hcmus.api.common.utils.JwtUtils;
 import com.hcmus.api.common.utils.BcryptUtils;
@@ -58,16 +59,16 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccountDTO authenticateAccount(String username, String password) throws GenericException {
         Optional<UserAccount> userAccountOptional = userAccountRepository.findById(username);
 
-        if (userAccountOptional.isEmpty() || !BcryptUtils.isSameCode(password, userAccountOptional.get().getHashedPassword()))
-            throw new GenericException(FailedOperation.LOGIN_FAILED);
+        if (userAccountOptional.isEmpty() || !BcryptUtils.isSameText(password, userAccountOptional.get().getHashedPassword()))
+            throw new GenericException(FailedOperation.LOGIN_FAILED, ExceptionType.COMMON_EXCEPTION);
 
         UserAccount userAccount = userAccountOptional.get();
         SuccessfulOperation successfulOperation = SuccessfulOperation.LOGIN_SUCCESSFULLY;
         String accessToken = JwtUtils.createAccessToken(username);
         UserAccountDTO userAccountDTO = userAccountMapper.convertToDTO(userAccount);
 
-        userAccount.setLastExpiredAt(DateUtils.convertLocalDateTimeToTimeStamp(LocalDateTime.now().plusHours(Time.ACCESS_TOKEN_EXPIRE_AFTER_HOUR)));
-        userAccountRepository.saveAndFlush(userAccount);
+        userAccount.setLastExpiredAt(DateUtils.convertLocalDateTimeToTimeStamp(LocalDateTime.now().plusHours(Time.REFRESH_TOKEN_EXPIRE_AFTER_HOUR)));
+        userAccountRepository.save(userAccount);
 
         userAccountDTO.setResponseInfo(new Response(successfulOperation.getMessage(), successfulOperation.getCode(), successfulOperation.isStatus()));
         userAccountDTO.setAccessToken(accessToken);
@@ -97,7 +98,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         ForgotPasswordHistoryDTO lastForgotPasswordRecord = forgotPasswordHistoryService.getLastByUserId(userId);
 
         if (!lastForgotPasswordRecord.getOtpCode().equals(otpCode) || lastForgotPasswordRecord.getResetAt() < DateUtils.convertLocalDateTimeToTimeStamp(LocalDateTime.now()))
-            throw new GenericException(FailedOperation.FORGOT_PASSWORD_OTP_VALIDATION_FAILED);
+            throw new GenericException(FailedOperation.FORGOT_PASSWORD_OTP_VALIDATION_FAILED, ExceptionType.COMMON_EXCEPTION);
 
         SuccessfulOperation response = SuccessfulOperation.FORGOT_PASSWORD_VALIDATE_OTP_SUCCESSFULLY;
 
@@ -110,13 +111,13 @@ public class UserAccountServiceImpl implements UserAccountService {
         Long oldResetAt = lastForgotPasswordRecord.getResetAt();
         SuccessfulOperation response = SuccessfulOperation.FORGOT_PASSWORD_RESET_PASSWORD_SUCCESSFULLY;
 
-        if (!BcryptUtils.isSameCode(lastForgotPasswordRecord.getOtpCode() + lastForgotPasswordRecord.getResetAt(), resetPasswordToken))
-            throw new GenericException(FailedOperation.FORGOT_PASSWORD_INVALID_RESET_TOKEN);
+        if (!BcryptUtils.isSameText(lastForgotPasswordRecord.getOtpCode() + lastForgotPasswordRecord.getResetAt(), resetPasswordToken))
+            throw new GenericException(FailedOperation.FORGOT_PASSWORD_INVALID_RESET_TOKEN, ExceptionType.COMMON_EXCEPTION);
 
         Optional<UserAccount> userAccountOptional = userAccountRepository.findByUserId(userId);
 
         if (userAccountOptional.isEmpty())
-            throw new GenericException(FailedOperation.NOT_EXISTED_ACCOUNT);
+            throw new GenericException(FailedOperation.NOT_EXISTED_ACCOUNT, ExceptionType.COMMON_EXCEPTION);
 
         UserAccount userAccount = userAccountOptional.get();
         String newHashedPassword = BcryptUtils.hashText(newPassword);
@@ -127,6 +128,25 @@ public class UserAccountServiceImpl implements UserAccountService {
         forgotPasswordHistoryService.update(new ForgotPasswordId(userId, oldResetAt), lastForgotPasswordRecord);
 
         userAccount.setHashedPassword(newHashedPassword);
+        userAccountRepository.save(userAccount);
+
+        return new Response(response.getMessage(), response.getCode(), response.isStatus());
+    }
+
+    @Override
+    public Response changePassword(String username, String oldPassword, String newPassword) throws GenericException {
+        Optional<UserAccount> userAccountOptional = userAccountRepository.findById(username);
+
+        if (userAccountOptional.isEmpty())
+            throw new GenericException(FailedOperation.NOT_EXISTED_ACCOUNT, ExceptionType.COMMON_EXCEPTION);
+
+        UserAccount userAccount = userAccountOptional.get();
+        SuccessfulOperation response = SuccessfulOperation.CHANGE_PASSWORD_SUCCESSFULLY;
+
+        if (!BcryptUtils.isSameText(oldPassword, userAccount.getHashedPassword()))
+            throw new GenericException(FailedOperation.CHANGE_PASSWORD_FAILED, ExceptionType.COMMON_EXCEPTION);
+
+        userAccount.setHashedPassword(BcryptUtils.hashText(newPassword));
         userAccountRepository.save(userAccount);
 
         return new Response(response.getMessage(), response.getCode(), response.isStatus());

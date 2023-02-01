@@ -11,4 +11,5 @@ public interface UserAccountService {
     ForgotPasswordEmailValidationResponse validateEmail(String email) throws GenericException;
     ForgotPasswordOtpValidationResponse validateOtp(String otpCode, Long userId) throws GenericException;
     Response resetPassword(String newPassword, String resetPasswordToken, Long userId) throws GenericException;
+    Response changePassword(String username, String oldPassword, String newPassword) throws GenericException;
 }

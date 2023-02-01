@@ -1,5 +1,6 @@
 package com.hcmus.api.controller.impl;
 
+import com.hcmus.api.common.form.ChangePasswordMainForm;
 import com.hcmus.api.common.form.ForgotPasswordEmailForm;
 import com.hcmus.api.common.form.ForgotPasswordMainForm;
 import com.hcmus.api.common.form.ForgotPasswordOtpForm;
@@ -13,7 +14,9 @@ import com.hcmus.api.model.dto.UserAccountDTO;
 import com.hcmus.api.service.impl.UserAccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +53,12 @@ public class UserAccountControllerImpl implements UserAccountController {
     public ResponseEntity<Response> resetPassword(@RequestBody ForgotPasswordMainForm mainForm) throws GenericException {
         Response resetPasswordResponse = userAccountService.resetPassword(mainForm.getPassword(), mainForm.getResetPasswordToken(), mainForm.getUserId());
         return ResponseEntity.ok(resetPasswordResponse);
+    }
+
+    @PutMapping("/{username}/password")
+    @Override
+    public ResponseEntity<Response> changePassword(@RequestBody ChangePasswordMainForm mainForm, @PathVariable String username) throws GenericException {
+        Response changePasswordResponse = userAccountService.changePassword(username, mainForm.getOldPassword(), mainForm.getNewPassword());
+        return ResponseEntity.ok(changePasswordResponse);
     }
 }

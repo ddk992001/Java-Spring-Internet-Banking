@@ -1,5 +1,6 @@
 package com.hcmus.api.service.impl;
 
+import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 import com.hcmus.api.exception.GenericException;
 import com.hcmus.api.model.dto.UserDTO;
@@ -59,7 +60,7 @@ public class UserServiceImpl implements GenericService<UserDTO, Long>, UserServi
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty())
-            throw new GenericException(FailedOperation.NOT_EXISTED_EMAIL);
+            throw new GenericException(FailedOperation.NOT_EXISTED_EMAIL, ExceptionType.COMMON_EXCEPTION);
 
         return userMapper.convertToDTO(user.get());
     }
