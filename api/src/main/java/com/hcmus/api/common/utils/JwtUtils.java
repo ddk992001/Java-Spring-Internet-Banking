@@ -4,6 +4,7 @@ import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 import com.hcmus.api.common.variables.Time;
 import com.hcmus.api.exception.GenericException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -31,11 +32,17 @@ public class JwtUtils {
         }
     }
 
-    public static String getUsernameFromToken(String accessToken) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(accessToken)
-                .getBody()
-                .getSubject();
+    public static String getUsernameFromToken(String accessToken) throws GenericException {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(accessToken)
+                    .getBody()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+        } catch (Exception e) {
+            throw new GenericException(FailedOperation.UNAUTHENTICATED_USER, ExceptionType.UNAUTHENTICATED_EXCEPTION);
+        }
     }
 }
