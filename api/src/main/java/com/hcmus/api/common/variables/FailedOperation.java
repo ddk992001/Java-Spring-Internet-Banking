@@ -9,7 +9,8 @@ public enum FailedOperation {
     FORGOT_PASSWORD_INVALID_RESET_TOKEN("Reset failed. This user do not have permission to reset password!", 7005),
     NOT_EXISTED_ACCOUNT("The user account does not exist in the system!", 7006),
     UNAUTHENTICATED_USER("Unauthenticated user!", 7007),
-    CHANGE_PASSWORD_FAILED("Old password is incorrect!", 7008);
+    CHANGE_PASSWORD_FAILED("Old password is incorrect!", 7008),
+    UNAUTHORIZED_USER("Not allowed user!", 7009);
 
     private final String message;
     private final int code;
