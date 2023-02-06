@@ -14,6 +14,6 @@ public class UserAccountMapper implements GenericMapper<UserAccount, UserAccount
 
     @Override
     public UserAccountDTO convertToDTO(UserAccount userAccount) {
-        return new UserAccountDTO(null, userAccount.getUsername(), userAccount.getUserId(), "", userAccount.getRefreshToken(), "");
+        return new UserAccountDTO(userAccount.getUsername(), userAccount.getUserId(), "", userAccount.getRefreshToken(), "");
     }
 }

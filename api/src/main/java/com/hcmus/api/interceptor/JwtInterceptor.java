@@ -47,7 +47,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         String accessToken = request.getHeader("access_token");
         String refreshToken = request.getHeader("refresh_token");
 
-        if (accessToken.isEmpty())
+        if (accessToken == null || accessToken.isEmpty())
             throw new GenericException(FailedOperation.UNAUTHENTICATED_USER, ExceptionType.UNAUTHENTICATED_EXCEPTION);
 
         String username = JwtUtils.getUsernameFromToken(accessToken);

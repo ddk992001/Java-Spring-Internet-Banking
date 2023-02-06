@@ -63,14 +63,12 @@ public class UserAccountServiceImpl implements UserAccountService {
             throw new GenericException(FailedOperation.LOGIN_FAILED, ExceptionType.COMMON_EXCEPTION);
 
         UserAccount userAccount = userAccountOptional.get();
-        SuccessfulOperation successfulOperation = SuccessfulOperation.LOGIN_SUCCESSFULLY;
         String accessToken = JwtUtils.createAccessToken(username);
         UserAccountDTO userAccountDTO = userAccountMapper.convertToDTO(userAccount);
 
         userAccount.setLastExpiredAt(DateUtils.convertLocalDateTimeToTimeStamp(LocalDateTime.now().plusHours(Time.REFRESH_TOKEN_EXPIRE_AFTER_HOUR)));
         userAccountRepository.save(userAccount);
 
-        userAccountDTO.setResponseInfo(new Response(successfulOperation.getMessage(), successfulOperation.getCode(), successfulOperation.isStatus()));
         userAccountDTO.setAccessToken(accessToken);
         userAccountDTO.setRole(userTypeService.getById(userAccount.getUserType()).getUserTypeName());
 

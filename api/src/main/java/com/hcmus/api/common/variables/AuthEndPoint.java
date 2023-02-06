@@ -3,7 +3,8 @@ package com.hcmus.api.common.variables;
 import org.springframework.http.HttpMethod;
 
 public enum AuthEndPoint {
-    CHANGE_PASSWORD_END_POINT("/accounts/**/password", Role.NO_ROLE, HttpMethod.PUT);
+    CHANGE_PASSWORD_END_POINT("/accounts/**/password", Role.NO_ROLE, HttpMethod.PUT),
+    GET_BANKING_ACCOUNTS_BY_USER_ID("/users/**/bankingAccounts", Role.ROLE_CUSTOMER, HttpMethod.GET);
 
     private final String endPoint;
     private final Role role;

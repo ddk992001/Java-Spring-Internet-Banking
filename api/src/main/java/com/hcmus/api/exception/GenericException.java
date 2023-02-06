@@ -3,7 +3,7 @@ package com.hcmus.api.exception;
 import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 
-public class GenericException extends Exception {
+public class GenericException extends RuntimeException {
     private final FailedOperation error;
     private final ExceptionType type;
 
