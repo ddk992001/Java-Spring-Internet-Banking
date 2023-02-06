@@ -96,8 +96,9 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         for (AuthEndPoint endPoint : AuthEndPoint.values()) {
             if (matchHandler.match(endPoint.getEndPoint(), endPointPart) && httpMethod.equals(endPoint.getHttpMethod().name())) {
-                String endPointRole = endPoint.getRole().getName();
-                if (endPointRole.equals(Role.NO_ROLE.getName()) || endPointRole.equals(userTypeName))
+                Role endPointRole = endPoint.getRole();
+                Role userRole = Role.findRoleByName(userTypeName);
+                if (endPointRole.getName().equals(Role.NO_ROLE.getName()) || userRole.getPriority() >= endPointRole.getPriority())
                     return true;
             }
         }
