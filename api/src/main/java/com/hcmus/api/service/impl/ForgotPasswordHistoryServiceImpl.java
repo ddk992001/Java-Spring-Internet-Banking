@@ -1,5 +1,6 @@
 package com.hcmus.api.service.impl;
 
+import com.hcmus.api.common.response.Response;
 import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 import com.hcmus.api.exception.GenericException;
@@ -37,12 +38,13 @@ public class ForgotPasswordHistoryServiceImpl implements GenericService<ForgotPa
     }
 
     @Override
-    public void create(ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) {
+    public Response create(ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) {
         forgotPasswordHistoryRepository.save(forgotPasswordHistoryMapper.convertToEntity(forgotPasswordHistoryDTO));
+        return null;
     }
 
     @Override
-    public void update(ForgotPasswordId id, ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) throws GenericException {
+    public Response update(ForgotPasswordId id, ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) throws GenericException {
         Optional<ForgotPasswordHistory> forgotPasswordHistory = forgotPasswordHistoryRepository.findById(id);
 
         if (forgotPasswordHistory.isEmpty())
@@ -57,16 +59,18 @@ public class ForgotPasswordHistoryServiceImpl implements GenericService<ForgotPa
 
         forgotPasswordHistoryRepository.deleteById(id);
         forgotPasswordHistoryRepository.save(forgotPasswordHistoryMapper.convertToEntity(oldForgotPasswordRecord));
+
+        return null;
     }
 
     @Override
-    public void deleteById(ForgotPasswordId id) {
-
+    public Response deleteById(ForgotPasswordId id) {
+        return null;
     }
 
     @Override
-    public void deleteAll() {
-
+    public Response deleteAll() {
+        return null;
     }
 
     @Override

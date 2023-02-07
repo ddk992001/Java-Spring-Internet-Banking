@@ -1,5 +1,6 @@
 package com.hcmus.api.service.impl;
 
+import com.hcmus.api.common.response.Response;
 import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
 import com.hcmus.api.exception.GenericException;
@@ -36,23 +37,23 @@ public class UserServiceImpl implements GenericService<UserDTO, Long>, UserServi
     }
 
     @Override
-    public void create(UserDTO object) {
-
+    public Response create(UserDTO object) {
+        return null;
     }
 
     @Override
-    public void update(Long id, UserDTO object) {
-
+    public Response update(Long id, UserDTO object) {
+        return null;
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public Response deleteById(Long id) {
+        return null;
     }
 
     @Override
-    public void deleteAll() {
-
+    public Response deleteAll() {
+        return null;
     }
 
     @Override

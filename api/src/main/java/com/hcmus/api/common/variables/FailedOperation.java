@@ -10,7 +10,9 @@ public enum FailedOperation {
     NOT_EXISTED_ACCOUNT("The user account does not exist in the system!", 7006),
     UNAUTHENTICATED_USER("Unauthenticated user!", 7007),
     CHANGE_PASSWORD_FAILED("Old password is incorrect!", 7008),
-    UNAUTHORIZED_USER("Not allowed user!", 7009);
+    UNAUTHORIZED_USER("Not allowed user!", 7009),
+    NOT_EXISTED_BANKING_ACCOUNT("The bank account does not exist in the system", 7010),
+    NOT_EXISTED_CONTACT("The contact does not exist in the system!", 7011);
 
     private final String message;
     private final int code;
