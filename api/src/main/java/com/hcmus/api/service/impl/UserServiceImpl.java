@@ -32,28 +32,33 @@ public class UserServiceImpl implements GenericService<UserDTO, Long>, UserServi
     }
 
     @Override
-    public UserDTO getById(Long id) {
-        return null;
+    public UserDTO getById(Long id) throws GenericException {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isEmpty())
+            throw new GenericException(FailedOperation.NOT_EXISTED_USER, ExceptionType.COMMON_EXCEPTION);
+
+        return userMapper.convertToDTO(userOptional.get());
     }
 
     @Override
-    public Response create(UserDTO object) {
-        return null;
+    public void create(UserDTO object) {
+
     }
 
     @Override
-    public Response update(Long id, UserDTO object) {
-        return null;
+    public void update(Long id, UserDTO object) {
+
     }
 
     @Override
-    public Response deleteById(Long id) {
-        return null;
+    public void deleteById(Long id) {
+
     }
 
     @Override
-    public Response deleteAll() {
-        return null;
+    public void deleteAll() {
+
     }
 
     @Override

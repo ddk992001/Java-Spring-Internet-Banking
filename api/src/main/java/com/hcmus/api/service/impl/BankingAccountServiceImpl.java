@@ -42,23 +42,23 @@ public class BankingAccountServiceImpl implements GenericService<BankingAccountD
     }
 
     @Override
-    public Response create(BankingAccountDTO object) {
-        return null;
+    public void create(BankingAccountDTO object) {
+
     }
 
     @Override
-    public Response update(String id, BankingAccountDTO object) throws GenericException {
-        return null;
+    public void update(String id, BankingAccountDTO object) throws GenericException {
+
     }
 
     @Override
-    public Response deleteById(String id) {
-        return null;
+    public void deleteById(String id) {
+
     }
 
     @Override
-    public Response deleteAll() {
-        return null;
+    public void deleteAll() {
+
     }
 
     @Override

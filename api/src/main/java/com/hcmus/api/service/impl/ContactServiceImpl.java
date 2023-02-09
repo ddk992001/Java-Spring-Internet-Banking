@@ -1,12 +1,14 @@
 package com.hcmus.api.service.impl;
 
-import com.hcmus.api.common.response.Response;
+import com.hcmus.api.common.utils.JwtUtils;
+import com.hcmus.api.common.variables.Bank;
 import com.hcmus.api.common.variables.ExceptionType;
 import com.hcmus.api.common.variables.FailedOperation;
-import com.hcmus.api.common.variables.SuccessfulOperation;
 import com.hcmus.api.exception.GenericException;
+import com.hcmus.api.model.dto.BankDTO;
 import com.hcmus.api.model.dto.BankingAccountDTO;
 import com.hcmus.api.model.dto.ContactDTO;
+import com.hcmus.api.model.dto.UserDTO;
 import com.hcmus.api.model.entity.Contact;
 import com.hcmus.api.model.entity.key.ContactId;
 import com.hcmus.api.model.mapper.impl.ContactMapper;
@@ -34,6 +36,14 @@ public class ContactServiceImpl implements GenericService<ContactDTO, ContactId>
     @Qualifier(value = "bankingAccountService")
     private BankingAccountServiceImpl bankingAccountService;
 
+    @Autowired
+    @Qualifier(value = "userService")
+    private UserServiceImpl userService;
+
+    @Autowired
+    @Qualifier(value = "bankService")
+    private BankServiceImpl bankService;
+
     @Override
     public List<ContactDTO> getAll() {
         return null;
@@ -45,13 +55,37 @@ public class ContactServiceImpl implements GenericService<ContactDTO, ContactId>
     }
 
     @Override
-    public Response create(ContactDTO object) {
-        return null;
+    public void create(ContactDTO contactDTO) throws GenericException {
+        ContactId contactId = new ContactId(contactDTO.getUserId(), contactDTO.getAccountNumber());
+        boolean isExistedContact = contactRepository.existsById(contactId);
+
+        if (isExistedContact)
+            throw new GenericException(FailedOperation.EXISTED_CONTACT, ExceptionType.COMMON_EXCEPTION);
+
+        if (contactDTO.getBankCode().equals(Bank.DEFAULT_BANK)) {
+            BankingAccountDTO bankingAccount = bankingAccountService.getById(contactDTO.getAccountNumber());
+
+            if (bankingAccount.getUserId().equals(contactDTO.getUserId()))
+                throw new GenericException(FailedOperation.ADD_OWN_ACCOUNT_TO_CONTACT, ExceptionType.COMMON_EXCEPTION);
+
+            if (!bankingAccount.isSpendAccount())
+                throw new GenericException(FailedOperation.ADD_SAVING_ACCOUNT_TO_CONTACT, ExceptionType.COMMON_EXCEPTION);
+
+            if (contactDTO.getNickName() == null) {
+                UserDTO userContact = userService.getById(bankingAccount.getUserId());
+                contactDTO.setNickName(userContact.getFullName());
+            }
+
+            contactRepository.save(new Contact(contactId, contactDTO.getNickName()));
+        }
+        else {
+            // add external contact
+            BankDTO connectedBank = bankService.getById(contactDTO.getBankCode());
+        }
     }
 
     @Override
-    public Response update(ContactId contactId, ContactDTO contactDTO) throws GenericException {
-        SuccessfulOperation response = SuccessfulOperation.UPDATE_CONTACT_SUCCESSFULLY;
+    public void update(ContactId contactId, ContactDTO contactDTO) throws GenericException {
         Optional<Contact> contactOptional = contactRepository.findById(contactId);
 
         if (contactOptional.isEmpty())
@@ -60,26 +94,20 @@ public class ContactServiceImpl implements GenericService<ContactDTO, ContactId>
         Contact contact = contactOptional.get();
         contact.setNickName(contactDTO.getNickName());
         contactRepository.save(contact);
-
-        return new Response(response.getMessage(), response.getCode(), response.isStatus());
     }
 
     @Override
-    public Response deleteById(ContactId contactId) throws GenericException {
-        SuccessfulOperation response = SuccessfulOperation.DELETE_CONTACT_SUCCESSFULLY;
-
+    public void deleteById(ContactId contactId) throws GenericException {
         try {
             contactRepository.deleteById(contactId);
         } catch (EmptyResultDataAccessException exception) {
             throw new GenericException(FailedOperation.NOT_EXISTED_CONTACT, ExceptionType.COMMON_EXCEPTION);
         }
-
-        return new Response(response.getMessage(), response.getCode(), response.isStatus());
     }
 
     @Override
-    public Response deleteAll() {
-        return null;
+    public void deleteAll() {
+
     }
 
     @Override

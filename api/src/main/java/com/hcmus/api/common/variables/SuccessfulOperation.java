@@ -6,7 +6,8 @@ public enum SuccessfulOperation {
     FORGOT_PASSWORD_RESET_PASSWORD_SUCCESSFULLY("Reset successfully. Please back to login screen and sign up!", 5002),
     CHANGE_PASSWORD_SUCCESSFULLY("Change password successfully!", 5003),
     DELETE_CONTACT_SUCCESSFULLY("Delete contact successfully!", 5004),
-    UPDATE_CONTACT_SUCCESSFULLY("Update contact successfully!", 5005);
+    UPDATE_CONTACT_SUCCESSFULLY("Update contact successfully!", 5005),
+    ADD_NEW_CONTACT_SUCCESSFULLY("Add contact successfully!", 5006);
 
     private final String message;
     private final int code;

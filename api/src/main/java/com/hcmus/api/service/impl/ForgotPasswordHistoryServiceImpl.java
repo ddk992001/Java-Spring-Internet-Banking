@@ -38,13 +38,12 @@ public class ForgotPasswordHistoryServiceImpl implements GenericService<ForgotPa
     }
 
     @Override
-    public Response create(ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) {
+    public void create(ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) {
         forgotPasswordHistoryRepository.save(forgotPasswordHistoryMapper.convertToEntity(forgotPasswordHistoryDTO));
-        return null;
     }
 
     @Override
-    public Response update(ForgotPasswordId id, ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) throws GenericException {
+    public void update(ForgotPasswordId id, ForgotPasswordHistoryDTO forgotPasswordHistoryDTO) throws GenericException {
         Optional<ForgotPasswordHistory> forgotPasswordHistory = forgotPasswordHistoryRepository.findById(id);
 
         if (forgotPasswordHistory.isEmpty())
@@ -59,18 +58,16 @@ public class ForgotPasswordHistoryServiceImpl implements GenericService<ForgotPa
 
         forgotPasswordHistoryRepository.deleteById(id);
         forgotPasswordHistoryRepository.save(forgotPasswordHistoryMapper.convertToEntity(oldForgotPasswordRecord));
-
-        return null;
     }
 
     @Override
-    public Response deleteById(ForgotPasswordId id) {
-        return null;
+    public void deleteById(ForgotPasswordId id) {
+
     }
 
     @Override
-    public Response deleteAll() {
-        return null;
+    public void deleteAll() {
+
     }
 
     @Override

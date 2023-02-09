@@ -41,22 +41,22 @@ public class UserTypeServiceImpl implements GenericService<UserTypeDTO, Long> {
     }
 
     @Override
-    public Response create(UserTypeDTO object) {
-        return null;
+    public void create(UserTypeDTO object) {
+
     }
 
     @Override
-    public Response update(Long id, UserTypeDTO object) {
-        return null;
+    public void update(Long id, UserTypeDTO object) {
+
     }
 
     @Override
-    public Response deleteById(Long id) {
-        return null;
+    public void deleteById(Long id) {
+
     }
 
     @Override
-    public Response deleteAll() {
-        return null;
+    public void deleteAll() {
+
     }
 }

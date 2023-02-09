@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface GenericService<T, I> {
     List<T> getAll();
-    T getById(I id) throws GenericException;
-    Response create(T object);
-    Response update(I id, T object) throws GenericException;
-    Response deleteById(I id) throws GenericException;
-    Response deleteAll();
+    T getById(I id);
+    void create(T object);
+    void update(I id, T object);
+    void deleteById(I id);
+    void deleteAll();
 }
